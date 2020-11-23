@@ -1,4 +1,5 @@
 /* tslint:disable no-var-requires */
+/* tslint:disable no-console */
 require('dotenv').config()
 import * as amqp from 'amqplib'
 import config from './config'
@@ -7,7 +8,7 @@ async function doSomeTask(msg: string) {
   return new Promise((resolve) => {
     setTimeout(async () => {
       resolve(msg + ' - processed')
-    }, 2000)
+    }, 125)
   })
 }
 
@@ -17,11 +18,15 @@ async function listen() {
   const replyChannel = await connection.createConfirmChannel()
 
   async function processMessage(msg: amqp.ConsumeMessage) {
-    const msgBody = msg.content.toString()
-    /* tslint:disable no-console */
-    console.log('msg', msgBody)
-    const result = await doSomeTask(msgBody)
-    await replyChannel.publish('processing', 'result', Buffer.from(result))
+    console.log('msg',  msg.content.toString())
+    const result = await doSomeTask(msg.content.toString())
+    const payload = JSON.parse(msg.content.toString())
+    const messagePayload = {
+      ...payload,
+      result,
+    }
+    const stringifiedResult = JSON.stringify(messagePayload)
+    await replyChannel.publish('processing', 'result', Buffer.from(stringifiedResult))
     await channel.ack(msg)
   }
 
