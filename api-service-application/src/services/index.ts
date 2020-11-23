@@ -1,4 +1,4 @@
-import * as uuid from 'uuid'
+/* tslint:disable no-console */
 import sendMessageToService from '../libs/send-message-to-service'
 
 interface User {
@@ -6,13 +6,8 @@ interface User {
 }
 
 async function sendUser (userData: User){
-  const payload = {
-    ...userData,
-    reqId: uuid.v4(),
-  }
-  const stringifiedPayload = JSON.stringify(payload)
+  const stringifiedPayload = JSON.stringify(userData)
   await sendMessageToService.send(stringifiedPayload)
-  /* tslint:disable no-console */
   console.log('message sent from api')
 }
 
