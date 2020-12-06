@@ -1,23 +1,11 @@
 import * as amqp from 'amqplib'
 import config from '../config'
-
-interface QueueSettings  {
-  request: {
-    name: string
-    key: string
-  }
-  response: {
-    name: string
-    key: string
-  }
-}
-
-type Callback = (msg: string) => void
+import { IHandler, IQueueSettings} from '../interfaces/request-events-listener'
 
 async function listen(
   exchange: string,
-  queueSettings: QueueSettings,
-  handler: Callback,
+  queueSettings: IQueueSettings,
+  handler: IHandler,
 ) {
   const connection = await amqp.connect(config.amqpUrl)
   const channel = await connection.createChannel()
