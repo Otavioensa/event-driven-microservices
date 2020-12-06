@@ -1,7 +1,7 @@
 /* tslint:disable no-var-requires */
 /* tslint:disable no-console */
 require('dotenv').config()
-import listenForServiceReply from '../../libs/listen-for-service-request'
+import listenForServiceReply from '../../libs/request-events-listener'
 import { processUser } from '../../processors'
 
 async function listen() {
