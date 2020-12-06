@@ -9,8 +9,7 @@ interface QueueSettings  {
 type Callback = (msg: string) => void
 
 async function listen(
-  exchange: string,
-  requestQueue: QueueSettings,
+  exchangeName: string,
   responseQueue: QueueSettings,
   handler: Callback
 ) {
@@ -23,19 +22,14 @@ async function listen(
     await channel.ack(msg)
   }
 
-  await channel.assertExchange(exchange, 'direct', { durable: true })
-
   await Promise.all([
-    channel.assertQueue(requestQueue.name, { durable: true }),
+    channel.assertExchange(exchangeName, 'direct', { durable: true }),
     channel.assertQueue(responseQueue.name, { durable: true }),
   ])
 
-  await Promise.all([
-    channel.bindQueue(requestQueue.name, exchange, requestQueue.key),
-    channel.bindQueue(responseQueue.name, exchange, responseQueue.key),
-  ])
-
-  await channel.prefetch(1)
+  await channel.bindQueue(responseQueue.name, exchangeName, responseQueue.key)
+  // export prefetch to config
+  await channel.prefetch(2)
   await channel.consume(responseQueue.name, processMsg)
 }
 

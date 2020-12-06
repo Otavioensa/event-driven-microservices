@@ -1,5 +1,3 @@
-/* tslint:disable no-console */
-
 import * as uuid from 'uuid'
 import services from '../services'
 import myEmitter from '../libs/emiter'

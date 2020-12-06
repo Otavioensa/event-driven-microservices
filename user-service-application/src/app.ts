@@ -16,7 +16,7 @@ app.use(helmet())
 app.post('/user', controllers.sendUser)
 app.use((req, res) => res.status(404).json({ message: 'Resource not found' }))
 
-serviceListerners.initalizeListerners()
+serviceListerners.initalizeListeners()
 
 app.listen(PORT, () => {
   /* tslint:disable no-console */

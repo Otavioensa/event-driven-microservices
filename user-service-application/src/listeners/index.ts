@@ -1,11 +1,11 @@
 import userListener from './user'
 
-async function initalizeListerners() {
+async function initalizeListeners() {
   // initialize all listeners
   // ...
   await userListener.listen()
 }
 
 export = {
-  initalizeListerners,
+  initalizeListeners,
 }
