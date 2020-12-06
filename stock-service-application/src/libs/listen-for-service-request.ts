@@ -25,18 +25,17 @@ async function listen(
 
   async function processMsg(msg: amqp.ConsumeMessage) {
     const stringifiedMessage = msg.content.toString()
-    const result = await handler(stringifiedMessage)
-    const stringifiedResult = Buffer.from(JSON.stringify(result))
+    await handler(stringifiedMessage)
+    const response = Buffer.from(stringifiedMessage)
     await replyChannel.publish(
       exchange,
       queueSettings.response.key,
-      stringifiedResult,
+      response,
     )
     await channel.ack(msg)
   }
 
   await Promise.all([
-    channel.assertExchange(exchange, 'direct', { durable: true }),
     channel.assertExchange(exchange, 'direct', { durable: true }),
     channel.assertQueue(queueSettings.request.name, { durable: true }),
     channel.assertQueue(queueSettings.response.name, { durable: true }),

@@ -2,15 +2,7 @@
 /* tslint:disable no-console */
 require('dotenv').config()
 import listenForServiceReply from '../../libs/listen-for-service-request'
-
-// move to processors
-async function doSomeTask(msg: string) {
-  return new Promise((resolve) => {
-    setTimeout(async () => {
-      resolve(msg + ' - processed')
-    }, 125)
-  })
-}
+import { processUser } from '../../processors'
 
 async function listen() {
   const queueSettings = {
@@ -26,7 +18,7 @@ async function listen() {
 
   const exchange = 'processing'
 
-  await listenForServiceReply.listen(exchange, queueSettings, doSomeTask)
+  await listenForServiceReply.listen(exchange, queueSettings, processUser)
 }
 
 export {
