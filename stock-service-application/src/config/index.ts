@@ -5,7 +5,7 @@ const config = {
   exchanges: {
     processing: 'processing',
   },
-
+  applicationPrefetch: Number(process.env.APP_PREFETCH) || 10,
 }
 
 export default config

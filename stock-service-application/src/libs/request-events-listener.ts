@@ -42,8 +42,7 @@ async function listen(
     ),
   ])
 
-  // export prefetch to config and env/vars
-  await channel.prefetch(2)
+  await channel.prefetch(config.applicationPrefetch)
   await channel.consume(queueSettings.request.name, processMsg)
 }
 
